@@ -1,0 +1,19 @@
+<apex:page Controller="ABCContainersInvoiceController" >
+<apex:form >
+<apex:pageBlock >
+
+<apex:pageBlocktable value="{!statementList}" var="stat">
+
+<apex:column value="{!stat.Name}"/>
+<apex:column headerValue="PDF">
+<apex:commandlink value="Show Line Items" action="{!showLineItems}">
+<apex:param name="invoId" value="{!stat.Id}"/>
+</apex:commandlink>
+</apex:column>
+
+
+</apex:pageBlocktable>
+
+</apex:pageBlock>
+</apex:form>
+</apex:page>
