@@ -1,0 +1,21 @@
+<apex:page Controller="CountryCityDependentController">
+	<apex:form id="formId">
+		<apex:pageBlock>
+			<apex:pageBlockSection>
+				<apex:selectList value="{!selectedCountry}" label="Select Country"
+					multiselect="false" size="1">
+					<apex:selectOptions value="{!countryoptions}" />
+
+				</apex:selectList>
+
+			</apex:pageBlockSection>
+			<apex:pageBlocksection id="citysection">
+				<apex:selectList value="{!selectedCity}" label="select City"
+					multiselect="false">
+					<apex:selectoptions value="{!cityoptions}" />
+				</apex:selectList>
+			</apex:pageBlocksection>
+		</apex:pageBlock>
+		<apex:commandButton value="Show Cities" rerender="citysection" />
+	</apex:form>
+</apex:page>

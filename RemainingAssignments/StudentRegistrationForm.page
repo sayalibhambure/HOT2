@@ -1,0 +1,50 @@
+<apex:page Controller="StudentRegistrationFormController"
+	 language="{!selectLang}">
+	<apex:pageMessages id="mesgId" />
+	<apex:form id="studformSection" >
+		<apex:pageblock >
+		 
+		
+			<apex:pageblockSection >
+			
+				<apex:selectList value="{!selectLang}" label="Select Language"
+					multiselect="false" size="1">
+					<apex:selectoptions value="{!languageOptionList}" />
+					<apex:actionSupport event="onchange" reRender="studformSection" />
+				</apex:selectList>
+			</apex:pageblockSection>
+		</apex:pageblock>
+
+		<apex:pageblock title="{!$Label.Page_Title}" >
+			<apex:pageblockSection columns = "1" >
+			
+				<apex:inputfield value="{!studInstance.Name}" />
+				
+				<apex:inputfield value="{!studInstance.Roll_No__c}" />
+				
+				<apex:inputfield value="{!studInstance.Gender__c}" />
+				
+				<apex:inputfield value="{!studInstance.Course__c}" />
+				
+				<apex:inputfield value="{!studInstance.HSC__c}" />
+				
+				<apex:inputfield value="{!studInstance.SSC__c}" />
+				
+				<apex:inputfield value="{!studInstance.Country__c}" />
+				
+				<apex:inputfield value="{!studInstance.State__c}" />
+				
+				<apex:inputfield value="{!studInstance.City__c}" />
+				
+             
+			</apex:pageblockSection>
+			<apex:commandButton value="Submit" action="{!MySave}" />
+
+
+
+
+
+		</apex:pageblock>
+	</apex:form>
+
+</apex:page>

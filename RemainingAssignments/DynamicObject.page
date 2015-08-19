@@ -1,0 +1,110 @@
+<apex:page controller="DynamicObjectController" >
+<apex:form id="formId">
+        <apex:pageblock id="block1">
+            <apex:pageblockSection id="sec1" columns="2">
+                <apex:actionRegion >
+                    <b><apex:outputText value="Select Object : " /></b>
+                    <apex:selectList label="Objects" value="{!selectObj}" size="1" required="true"
+                        multiselect="false">
+                       <b> <apex:selectOption itemvalue="" itemLabel="Select Object To Query Upon" /></b>
+                        <apex:selectOptions value="{!ObjectList}" />
+                        <apex:actionSupport event="onchange" action="{!showFieldList}" status="load"
+                            reRender="block2,formId" />
+                    </apex:selectList>
+                    </apex:actionRegion>
+                 
+                <apex:actionRegion >
+                <apex:actionStatus id="load" style="align:center;">
+                <apex:facet name="start">
+                <apex:image url="{!$Resource.LoadingImage}" width="150" height="150" />
+                </apex:facet>
+                </apex:actionStatus>
+                </apex:actionRegion>
+            </apex:pageblockSection>
+        </apex:pageblock> 
+
+        <apex:pageblock id="block2" rendered="{!rendSec2}">
+            <apex:pageblockSection id="sec2" columns="4" >
+                 
+                    <apex:actionRegion >
+                    
+                        <b><apex:outputLabel value="Select Fields : " /></b>
+                        
+                        <apex:selectList value="{!selectField}" multiselect="true"
+                            size="5" required="true">
+                            <apex:selectoptions value="{!FieldList}" />
+                        </apex:selectList>
+                    </apex:actionRegion>
+                
+                <apex:actionRegion >
+                <apex:commandButton value=">>" action="{!showSelectedFields}"/>
+                <br />
+                <apex:commandButton value="<<" action="{!undoSelectedFields}"/>
+                </apex:actionRegion>
+                      
+                      <apex:actionRegion >
+                       <b><apex:outputLabel value="Selected Fields : " /></b>
+                    <apex:selectList value="{!selectedField}" size="10">
+                        <apex:selectOptions value="{!selectedFieldsList}" />
+
+                    </apex:selectList>
+                    </apex:actionRegion>
+                    
+                    <apex:actionRegion >
+                    <b><apex:outputLabel value="Selected Field to Order By" /></b>
+                    <apex:selectList value="{!orderFld}">
+                    <apex:selectOptions value="{!selectedFieldsList}"/>
+                    </apex:selectList>
+                    </apex:actionRegion>
+                 
+            </apex:pageblockSection>
+        </apex:pageblock>
+
+        <apex:pageBlock id="block3" rendered="{!rendSec3}">
+            <apex:pageBlocksection id="sec3" columns="2"  >
+            
+                <apex:actionRegion >
+                <b><apex:outputText value="Select No. of Records : " /></b>
+                <apex:selectList value="{!selectRecord}" size="1">
+                <b> <apex:selectOption itemvalue="" itemLabel="Select No. of records" /></b>
+                    <apex:selectOption itemValue="500" />
+                    <apex:selectOption itemValue="1000" />
+                    <apex:selectOption itemValue="5000" />
+                    <apex:selectOption itemValue="50000" />
+                    
+                </apex:selectList>
+                </apex:actionRegion>
+                <apex:actionRegion >
+                <apex:selectRadio value="{!ascOrder}">
+                <apex:selectOption itemvalue="asc" itemLabel="Ascending"/>
+                <apex:selectOption itemvalue="desc" itemLabel="Descending"/>
+                </apex:selectRadio>
+                </apex:actionRegion>
+                <apex:commandButton value="Show Query" action="{!showQuery}" reRender="block4"/>
+            </apex:pageBlocksection>
+        </apex:pageBlock>
+        
+        <apex:outputPanel id="block4">
+        <apex:pageBlock rendered="{!rendSec4}">
+        <apex:pageBlockSection id="sec4"   >
+        <apex:outputPanel layout="block">
+        <b><apex:outputText value="Generated SOQL Query :"/></b><br/>
+        <apex:outputText value="{!queryString}"/><br/>
+        </apex:outputPanel>
+        <apex:commandButton value="Execute Query" action="{!ExecuteQuery}" reRender="block5"/>
+        </apex:pageBlockSection>
+        </apex:pageBlock>
+        </apex:outputPanel>
+        
+        <apex:outputPanel id="block5">
+        <apex:pageBlock rendered="{!rendSec5}">
+        <apex:pageBlockTable value="{!dynamicRecordsList}" var="dynamic">
+        <apex:repeat value="{!strFlds}" var="fields">
+        <apex:column value="{!dynamic[fields]}"/>
+        </apex:repeat>
+        </apex:pageBlockTable> 
+        </apex:pageBlock>
+        </apex:outputPanel>
+        
+    </apex:form>
+</apex:page>
