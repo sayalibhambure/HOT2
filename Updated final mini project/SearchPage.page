@@ -1,0 +1,72 @@
+<apex:page controller="SearchHistoryPageController" tabStyle="Account">
+<apex:pageMessages id="mesgId" />
+<apex:form title="Search History">
+<!-- <apex:outputText value ="GOOGBLEFORCE.COM SEARCH"/><br/> -->
+<apex:pageBlock id="block1">
+<apex:pageBlockSection >
+<apex:pageBlockSectionItem >
+<apex:commandLink value="Show Search History" action="{!showHistory}" reRender="panel1,panel1-2,block1" status="load"/>
+<apex:actionStatus id="load" style="align:center;">
+<apex:facet name="start">
+<apex:image url="{!$Resource.LoadingImage}" width="100" height="100" />
+</apex:facet>
+</apex:actionStatus>
+</apex:pageBlockSectionItem>
+<apex:pageBlockSectionItem id="clearId">
+<apex:commandLink value="Clear All" action="{!clear}" rendered="{!rendClear}" reRender="panel1,panel1-2,panel2" status="load"/>
+</apex:pageBlockSectionItem>
+</apex:pageBlockSection>
+
+<apex:pageBlockSection >
+<apex:selectList value="{!size}" multiselect="false" size="1" style="position: absolute;right: 20px;width: 50px;">
+<apex:selectOption itemValue="5" itemLabel="5"/>
+<apex:selectOption itemValue="10" itemLabel="10"/>
+<apex:selectOption itemValue="15" itemLabel="15"/>
+<apex:selectOption itemValue="20" itemLabel="20"/>
+</apex:selectList>
+</apex:pageBlockSection>
+</apex:pageBlock>
+
+
+<apex:outputPanel id="panel1">
+<apex:pageBlock id="block2" rendered="{!rendSection2}">
+<apex:pageBlockSection >
+<apex:pageBlockTable value="{!QueryList}" var="query">
+<apex:column >
+<apex:facet name="header">All Queries Searched</apex:facet>
+<apex:commandLink value="{!query.Name}" action="{!showResults}" reRender="panel2,panel1" status="load">
+<apex:param name="queryId" value="{!query.Id}"/>
+</apex:commandLink>
+</apex:column>
+</apex:pageBlockTable>
+</apex:pageBlockSection>
+</apex:pageBlock>
+<!-- <apex:pageBlock rendered="{!rendText}"> -->
+<!-- <apex:outputText value="{!selectedSearch}"/> -->
+<!-- </apex:pageBlock> -->
+</apex:outputPanel>
+
+<apex:outputPanel id="panel1-2">
+<apex:pageblock id="block4" rendered="{!rendSection4}">
+<apex:commandButton value="<<" action="{!beginning}" status="load" disabled="{!beginningDisabled}"/>
+<apex:commandButton value="<" action="{!previous}" status="load" disabled="{!previousDisabled}"/>
+<apex:commandButton value=">" action="{!next}" status="load" disabled="{!nextDisabled}"/>
+<apex:commandButton value=">>" action="{!endd}" status="load" disabled="{!enddDisabled}"/>
+</apex:pageblock>
+</apex:outputPanel>
+
+<apex:outputPanel id="panel2">
+<apex:pageblock id="block3" rendered="{!rendSection3}">
+<U><h4><apex:outputText value="{!selectedSearch}"/></h4></U><br/><br/>
+<apex:pageblockTable value="{!respList}" var="res" columns="3">
+<apex:column value="{!res.Title__c}" width="25%"/>
+<apex:column value="{!res.Link__c}" width="35%"/>
+<apex:column value="{!res.Description__c}" width="40%"/>
+</apex:pageblockTable>
+</apex:pageblock>
+</apex:outputPanel>
+<!-- <apex:outputText> -->
+<!-- </apex:outputText> -->
+
+</apex:form>
+</apex:page>
