@@ -4,11 +4,13 @@ public class EternusAttendanceController {
     public String logoutMesg {get; set;}
     
     public PageReference redirectToLogin(){
+     //Use Page.pageName
       PageReference pagelogin = new PageReference('/apex/EternusLoginPage');
       return pagelogin;
     }
     
     public PageReference redirectToLogout(){
+    	//same as above
       PageReference pagelogout = new PageReference('/apex/EternusLogoutPage');
       return pagelogout;
     }
@@ -22,20 +24,26 @@ public class EternusAttendanceController {
     public PageReference verifyPassword(){
         PageReference pg = new PageReference('/apex/EternusLoginPage');
         List<User> userList=[SELECT Id,Name FROM User WHERE Password__c =:pwd];
+        //Use list.isEmpty()
         if(userList.size() == 0){
           //loginMesg = 'Illegal Access!!Check Password!!';
+          //Messages in custom label
           ApexPages.addmessage(new ApexPages.message(ApexPages.severity.ERROR,'Illegal Access!!Check Password!!'));
           pwd = '';
           }
           else{
+          //Query Indentation
             List<Login_Details__c> logInstanceList = [SELECT Id,LogoutTime__c FROM Login_Details__c WHERE Employee__c =:userList[0].Id AND CreatedDate=today];
             if(logInstanceList.size() == 0 ){
+            	//Create a seperate function to avoid code repeatetion
               Login_Details__c loginInstance = new Login_Details__c();
               loginInstance.Name = 'Login '+userList[0].Name;
               loginInstance.LoginTime__c = system.now();
               loginInstance.Employee__c = userList[0].Id;
+              //Exception handling
               insert loginInstance;
               system.debug('************************'+loginInstance.LoginTime__c);
+              //Variable Name for currentTime
               DateTime CurentTime = loginInstance.LoginTime__c;
               String TimeZones = '(GMT+05:30) India Standard Time (Asia/Kolkata)';
               system.debug('################'+TimeZones);
@@ -84,12 +92,14 @@ public class EternusAttendanceController {
           }
           else{
           try{
+           //List name
             List<Login_Details__c> loginInstance1 = [SELECT Id,Employee__c,LoginTime__c,LogoutTime__c FROM Login_Details__c WHERE Employee__c =:userList[0].Id AND LogoutTime__c = NULL];
             if(loginInstance1.size() <> 0){
             List<Login_Details__c> loginInstance =[SELECT Id,Employee__c,LoginTime__c FROM Login_Details__c WHERE Employee__c =:userList[0].Id ORDER BY CreatedDate];
             loginInstance[loginInstance.size()-1].LogoutTime__c = system.now();
             update loginInstance;
             DateTime logoutTime = loginInstance[loginInstance.size()-1].LogoutTime__c;
+            //Variable name logout
             String logouT = logoutTime.format('yyyy-MM-dd HH:mm:ss','Asia/Kolkata');
             //logoutMesg = 'Logout Successful '+userList[0].Name+'!!\n Your Logout time is '+logouT;
             ApexPages.addmessage(new ApexPages.message(ApexPages.severity.CONFIRM,'Logout Successful '+userList[0].Name+'!!\n Your Logout time is '+logouT));
