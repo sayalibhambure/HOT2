@@ -10,6 +10,7 @@ global class EmployeeLeaveMailsProcessing implements Messaging.InboundEmailHandl
           system.debug('**************'+body);
           String startDate = body.substringBetween('[',',');
           String endDate = body.substringBetween(',',']');
+          // Handle exception for date format
           Date sDate = Date.valueOf(startDate);
           Date eDate = Date.valueOf(endDate);
            if(sDate > eDate){
@@ -18,6 +19,7 @@ global class EmployeeLeaveMailsProcessing implements Messaging.InboundEmailHandl
             }
             
         List<User> userList = [SELECT Id FROM User WHERE Name =:email.subject];
+          // Check if the list is empty instead of null
           if(userList <> NULL){
             try{
              Leave__c leaveInstance = new Leave__c();
@@ -28,6 +30,7 @@ global class EmployeeLeaveMailsProcessing implements Messaging.InboundEmailHandl
              leaveInstance.Leave_Reason__c = reason;
              insert leaveInstance;
             }
+            // Catch exception for date format and another for dml operation
             catch(Exception e){
              result.message='Please put Name in subject and use proper Date Format!!\nPlease use correct Date Format in the Mail Body\nExample : [2015-10-08,2015-10-15]';
              result.success = false;
