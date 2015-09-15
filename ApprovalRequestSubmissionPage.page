@@ -6,6 +6,7 @@
 <apex:form>
 <apex:pageBlock title="Employee Leaves">
 <apex:pageBlockSection columns="3">
+// Assign ID to the form component and reRender the form instead
 <apex:commandlink value="* Pending Leaves" action="{!showPendingLeaves}" reRender="panel1Id,panel2Id,panel3Id,panel4Id,panel5Id,panel6Id,mesgId"/>
 <apex:commandlink value="* Approved Leaves" action="{!showApprovedLeaves}" reRender="panel1Id,panel2Id,panel3Id,panel4Id,panel5Id,panel6Id,mesgId"/>
 <apex:commandlink value="* Rejected Leaves" action="{!showRejectedLeaves}" reRender="panel1Id,panel2Id,panel3Id,panel4Id,panel5Id,panel6Id,mesgId"/>
