@@ -1,0 +1,9 @@
+<apex:page controller = "EternusAttendanceController">
+<apex:image value="{!$Resource.EternusLogo1}" width="1000" height="150" />
+<apex:form>
+<apex:pageBlock title="Eternus Attendance">
+<apex:commandButton value="Login" action="{!redirectToLogin}"/>&nbsp;&nbsp;
+<apex:commandbutton value="Logout" action="{!redirectToLogout}"/>
+</apex:pageBlock>
+</apex:form>
+</apex:page>

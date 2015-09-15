@@ -1,0 +1,98 @@
+<apex:page controller="ApprovalRequestController">
+<apex:image value="{!$Resource.EternusLogo1}" width="1000" height="150" />
+<apex:outputPanel id="mesgId">
+<apex:pageMessages/>
+</apex:outputPanel>
+<apex:form>
+<apex:pageBlock title="Employee Leaves">
+<apex:pageBlockSection columns="3">
+<apex:commandlink value="* Pending Leaves" action="{!showPendingLeaves}" reRender="panel1Id,panel2Id,panel3Id,panel4Id,panel5Id,panel6Id,mesgId"/>
+<apex:commandlink value="* Approved Leaves" action="{!showApprovedLeaves}" reRender="panel1Id,panel2Id,panel3Id,panel4Id,panel5Id,panel6Id,mesgId"/>
+<apex:commandlink value="* Rejected Leaves" action="{!showRejectedLeaves}" reRender="panel1Id,panel2Id,panel3Id,panel4Id,panel5Id,panel6Id,mesgId"/>
+<apex:commandlink value="* Log New Leaves" action="{!leaveLogging}"/>
+<apex:commandlink value="* Leave History" action="{!showLeaveHistory}"/>
+</apex:pageBlockSection>
+</apex:pageBlock>
+<apex:outputPanel id="panel1Id">
+<apex:pageBlock title="Pending Leaves" rendered="{!rendpendingBlock}">
+<apex:pageBlockTable value="{!pendingLeaveList}" var="pnd" columns="5">
+<apex:column value="{!pnd.Employee__c}"/>
+<apex:column value="{!pnd.Start_Date__c}"/>
+<apex:column value="{!pnd.End_Date__c}"/>
+<apex:column value="{!pnd.Leave_Status__c}"/>
+<apex:column>
+<apex:commandLink value="Submit For Approval" action="{!submitForApproval}">
+<apex:param name="leaveId" value="{!pnd.Id}"/>
+</apex:commandLink>
+</apex:column>
+</apex:pageBlockTable>
+</apex:pageBlock>
+</apex:outputPanel>
+<apex:outputPanel id="panel2Id">
+<apex:pageBlock title="Approved Leaves" rendered="{!rendapprovedBlock}">
+<apex:pageBlockTable value="{!approvedLeaveList}" var="aprvd" columns="4">
+<apex:column value="{!aprvd.Employee__c}"/>
+<apex:column value="{!aprvd.Start_Date__c}"/>
+<apex:column value="{!aprvd.End_Date__c}"/>
+<apex:column value="{!aprvd.Leave_Status__c}"/>
+</apex:pageBlockTable>
+</apex:pageBlock>
+</apex:outputPanel>
+<apex:outputPanel id="panel3Id">
+<apex:pageBlock title="Rejected Leaves" rendered="{!rendrejectedBlock}">
+<apex:pageBlockTable value="{!rejectedLeaveList}" var="rej" columns="4">
+<apex:column value="{!rej.Employee__c}"/>
+<apex:column value="{!rej.Start_Date__c}"/>
+<apex:column value="{!rej.End_Date__c}"/>
+<apex:column value="{!rej.Leave_Status__c}"/>
+</apex:pageBlockTable>
+</apex:pageBlock>
+</apex:outputPanel>
+<apex:outputPanel id="panel4Id">
+<apex:pageBlock title="Log New Leaves" rendered="{!rendNewLeaveBlock}">
+<apex:pageBlockButtons>
+<apex:commandButton value="Save/Log" action="{!saveLeaveRecord}" reRender="mesgId"/>
+</apex:pageBlockButtons>
+<apex:pageBlockSection columns="2">
+<apex:inputField value="{!leaveInstance.Employee__c}"/>
+<apex:inputField value="{!leaveInstance.Start_Date__c}"/>
+<apex:inputField value="{!leaveInstance.End_Date__c}"/>
+<apex:inputField value="{!leaveInstance.Leave_Status__c}"/>
+<apex:inputField value="{!leaveInstance.Leave_Reason__c}"/>
+</apex:pageBlockSection>
+</apex:pageBlock>
+</apex:outputPanel>
+<apex:outputPanel id="panel5Id">
+<apex:pageBlock title="Select User To View Leave History" rendered="{!rendAllLeavesBlock}">
+<apex:pageBlockTable value="{!allUsersList}" var="usr" columns="1">
+<apex:column headerValue = "Employee Name">
+<apex:commandlink value="{!usr.Name}" action="{!showMyLeaveHistory}">
+<apex:param name="userId" value="{!usr.Id}"/>
+</apex:commandlink>
+</apex:column>
+</apex:pageBlockTable>
+</apex:pageBlock>
+</apex:outputPanel>
+<apex:outputPanel id="panel6Id">
+<apex:pageBlock title="Leave History" rendered="{!rendUserLeaveBlock}">
+<apex:pageBlockSection columns="1">
+<apex:pageBlockTable value="{!usrLeaveList}" var="usrlst" columns="6">
+<apex:column value="{!usrlst.Employee__c}"/>
+<apex:column value="{!usrlst.Start_Date__c}"/>
+<apex:column value="{!usrlst.End_Date__c}"/>
+<apex:column value="{!usrlst.Number_Of_Days__c}"/>
+<apex:column value="{!usrlst.Leave_Reason__c}"/>
+<apex:column value="{!usrlst.Leave_Status__c}"/>
+</apex:pageBlockTable>
+<apex:outputPanel>
+<apex:outputLabel value="Leaves Permitted : "/><apex:outputText label="Leaves permitted : " value="{!leavesPermitted}"/><br/><br/>
+<apex:outputLabel value="Leaves taken : "/><apex:outputText label="Leaves taken : " value="{!totLeavestaken}"/><br/><br/>
+<apex:outputLabel value="Balance leaves : "/><apex:outputText label="Balance leaves : " value="{!leavesBalance}"/><br/><br/>
+<apex:outputLabel value="Leave Eligibility : "/><apex:outputText label="Balance leaves : " value="{!eligibility}"/><br/><br/>
+</apex:outputPanel>
+</apex:pageBlockSection>
+</apex:pageBlock>
+
+</apex:outputPanel>
+</apex:form>
+</apex:page>

@@ -1,0 +1,17 @@
+<apex:page controller="EternusAttendanceController" id="pageId">
+<apex:image value="{!$Resource.EternusLogo1}" width="1000" height="150" />
+<apex:outputPanel id="mesgId"> 
+<apex:pageMessages/>
+</apex:outputPanel> 
+<apex:form>
+<apex:pageBlock title="Employee Login">
+<apex:outputText value="{!loginMesg}"/><br/>
+<I><apex:outputLabel value="Enter Password : "/></I>
+<apex:inputSecret value="{!pwd}"/><br/><br/>
+<apex:pageBlockButtons>
+<apex:commandButton value="Verify" action="{!verifyPassword}"/>&nbsp;&nbsp;
+<apex:commandButton value="Home" action="{!goToHomePage}"/>
+</apex:pageBlockButtons>
+</apex:pageBlock>
+</apex:form>
+</apex:page>
