@@ -86,6 +86,7 @@ public class EternusAttendanceController {
     }
     
     public PageReference verifylogoutPassword(){
+      // Remove hardcoded name of page. Replace it with Page.PageName
       PageReference pg = new PageReference('/apex/EternusLogoutPage');
       List<User> userList=[SELECT Id,Name FROM User WHERE Password__c =:pwd];
       if(userList.size() == 0){

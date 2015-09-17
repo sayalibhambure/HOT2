@@ -1,6 +1,7 @@
 public class InstantiateAttendanceObject {
     public static final String APPROVED_STATUS = 'Approved';
-    public static final String ACTIVE_USERSTATUS = 'Active';
+    public static final String ACTIVE_USERSTATUS = 'Active';  
+    // USER_STATUS_ACTIVE
     
     public void dailyAttendanceCalculation(){
      Attendance_details__c attendInstance = new Attendance_details__c();

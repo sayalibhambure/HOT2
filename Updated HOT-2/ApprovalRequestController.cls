@@ -7,9 +7,11 @@ public class ApprovalRequestController {
     
     public List<Leave__c> leaveList;
     
+    // Change the lists into a Map<Status, List<Leaves__c>>
     public List<Leave__c> approvedLeaveList      {get; set;}
     public List<Leave__c> pendingLeaveList       {get; set;}
     public List<Leave__c> rejectedLeaveList      {get; set;}
+
     public List<User> allUsersList               {get; set;}
     public List<Leave__c> usrLeaveList           {get; set;}
     public boolean rendNewLeaveBlock             {get; set;}
@@ -21,6 +23,7 @@ public class ApprovalRequestController {
     public Id idOfLeave;
     public Id idOfUser;
     
+    // Default constructor
     public ApprovalRequestController(){
        leaveList = new List<Leave__c>();
        pendingLeaveList = new List<Leave__c>();
@@ -33,9 +36,16 @@ public class ApprovalRequestController {
     }
     
     //Common Method to query on leaves
+    // Method should be private
     public List<Leave__c> globalQuery(Set<String> statusSet){
-       leaveList = [SELECT Employee__c,Start_Date__c,End_Date__c,Leave_Status__c,Leave_Reason__c 
-                    FROM Leave__c WHERE Leave_Status__c IN :statusSet];
+       leaveList = [SELECT Employee__c
+                         , Start_Date__c
+                         , End_Date__c
+                         , Leave_Status__c
+                         , Leave_Reason__c 
+                      FROM Leave__c
+                     WHERE Leave_Status__c
+                        IN :statusSet];
        return leaveList;
     }
     
@@ -44,6 +54,9 @@ public class ApprovalRequestController {
        Set<String> set_Status = new Set<String>();
        set_Status.add(STATUS_PENDING);
        set_Status.add(STATUS_NOTSUBMITTED);
+
+       // Add the values in the set constructor itself
+
        pendingLeaveList = globalQuery(set_Status);
        if(pendingLeaveList.isEmpty()){
          ApexPages.addmessage(new ApexPages.message(ApexPages.severity.ERROR,system.Label.No_Pending_Leaves)); 
@@ -101,15 +114,18 @@ public class ApprovalRequestController {
         Approval.ProcessSubmitRequest request = new Approval.ProcessSubmitRequest();
         request.setObjectId(idOfLeave);
         
-      //Submit The Approval Request
-      Approval.ProcessResult result = Approval.process(request);
+          //Submit The Approval Request
+          Approval.ProcessResult result = Approval.process(request);
       }
       catch(Exception e){
         ApexPages.addmessage(new ApexPages.message(ApexPages.severity.ERROR,system.Label.LeaveRequestNotSubmitted));
         return;
        }
+
+       // Query indentation
       List<Leave__c> leaveInstanceList = [SELECT Id,Leave_Status__c FROM 
                                           Leave__c WHERE Id =:idOfLeave];
+        // Check if the list is empty
       leaveInstanceList[0].Leave_Status__c = STATUS_PENDING;
       update leaveInstanceList;
       ApexPages.addmessage(new ApexPages.message(ApexPages.severity.CONFIRM,system.Label.LeaveRequestSubmitted));
