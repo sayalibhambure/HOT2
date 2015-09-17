@@ -1,0 +1,53 @@
+<apex:page controller="EternusAttendanceController" id="pageId">
+	<apex:image value="{!$Resource.EternusLogo1}" width="1000" height="150" />
+	<apex:outputPanel id="mesgId">
+		<apex:pageMessages />
+	</apex:outputPanel>
+	<apex:form id="formId">
+		<apex:pageBlock title="Employee Login">
+			<apex:outputText value="{!loginMesg}" />
+			<br />
+			<I><apex:outputLabel value="Enter Password : " /></I>
+			<apex:inputSecret value="{!pwd}" />
+			<br />
+			<br />
+			<apex:pageBlockButtons>
+				<apex:commandButton value="Verify" action="{!verifyPassword}" />&nbsp;&nbsp;
+<apex:commandButton value="Home" action="{!goToHomePage}" />
+				<apex:commandButton value="My Leave History"
+					action="{!viewLeaveHistory}" reRender="hstryId,mesgId" />
+				<apex:commandButton value="Clear All" action="{!clearAll}"
+					reRender="formId" />
+			</apex:pageBlockButtons>
+		</apex:pageBlock>
+		<apex:outputPanel id="hstryId">
+			<apex:pageBlock title="My Leave History" rendered="{!rendHistory}">
+				<apex:pageBlockButtons>
+					<apex:commandButton value="Apply For Leave"
+						action="{!showNewLeaveSection}" />
+				</apex:pageBlockButtons>
+				<apex:pageBlockTable value="{!usrLeaves}" var="usrLv" columns="5">
+					<apex:column value="{!usrLv.Employee__c}" />
+					<apex:column value="{!usrLv.Start_Date__c}" />
+					<apex:column value="{!usrLv.End_Date__c}" />
+					<apex:column value="{!usrLv.Leave_Reason__c}" />
+					<apex:column value="{!usrLv.Leave_Status__c}" />
+				</apex:pageBlockTable>
+			</apex:pageBlock>
+		</apex:outputPanel>
+		<apex:outputPanel id="newLvId">
+			<apex:pageBlock title="Apply For Leave" rendered="{!rendNewLeave}">
+				<apex:pageBlockButtons>
+					<apex:commandButton value="Save/Log" action="{!customInsertLeave}" />
+				</apex:pageBlockButtons>
+				<apex:pageBlockSection columns="2">
+					<apex:inputfield value="{!leaveInstance.Employee__c}" />
+					<apex:inputfield value="{!leaveInstance.Start_Date__c}" />
+					<apex:inputfield value="{!leaveInstance.End_Date__c}" />
+					<apex:inputfield value="{!leaveInstance.Leave_Status__c}" />
+					<apex:inputfield value="{!leaveInstance.Leave_Reason__c}" />
+				</apex:pageBlockSection>
+			</apex:pageBlock>
+		</apex:outputPanel>
+	</apex:form>
+</apex:page>
